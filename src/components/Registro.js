@@ -12,9 +12,11 @@ export default class Registro extends Component {
     cajaPassword = React.createRef();
     cajaRepPassword = React.createRef();
     cajaApellidos = React.createRef();
+    cajaProvincia = React.createRef();
 
     state = {
         usuario: {},
+        provincia: [],
         Role: []
     }
 
@@ -26,6 +28,8 @@ export default class Registro extends Component {
         var telefono = this.cajaTelefono.current.value;
         var linkedin = this.cajaLinkedin.current.value;
         var password = this.cajaPassword.current.value;
+        var rol = this.cajaRoles.current.value;
+        var provincia = this.cajaProvincia.current.value;
 
         var datos = {
             nombre: nombre,
@@ -33,6 +37,10 @@ export default class Registro extends Component {
             telefono: telefono,
             linkedin: linkedin,
             password: password,
+            idRole: rol,
+            idProvincia: provincia,
+            idEmpresaCentro: null,
+            estado: 1,
         }
 
         const request = 'api/usuarios';
@@ -43,7 +51,7 @@ export default class Registro extends Component {
             })
         })
     }
-    /*
+
     getRoles = () => {
         const headers = {
             Authorization: "Bearer " + Global.token
@@ -57,18 +65,41 @@ export default class Registro extends Component {
         })
     }
 
-    componentDidMount = () => {
-        this.getRoles()
+    getProvincias = () => {
+        const headers = {
+            Authorization: "Bearer " + Global.token
+        }
+        const request = 'api/provincias';
+        const url = Global.urlApi + request;
+        axios.get(url, {headers}).then(response =>{
+            this.setState({
+                provincia: response.data
+            })
+        })
     }
-    */
+
+    componentDidMount = () => {
+        this.getRoles();
+        this.getProvincias()
+    }
 
     render() {
         return (
             <div className='container'>
-                <div className='card'>
+                <div className='card text-center'>
                     <div className="card-body">
                         <h2 className='card-title'>Registro</h2>
                         <form>
+                            <label>Roles:</label>
+                            <select name="rol" ref={this.cajaRoles} className="form-control">
+                                {           
+                                    this.state.Role.map((Role, index) =>{
+                                        return(<option key={index} value={Role.idRole}>
+                                            {Role.tipoRole}
+                                        </option>)
+                                    })     
+                                }
+                            </select>
                             <br/>
                             <div className="row">
                                 <div className='col md-6'>
@@ -103,8 +134,24 @@ export default class Registro extends Component {
                                 </div>
                             </div>
                             <br />
-                            <label>Repetir Contraseña:</label>
-                            <input type="password" name="reppass" ref={this.cajaRepPassword} className="form-control" />
+                            <div className="row">
+                                <div className='col md-6'>
+                                    <label>Repetir Contraseña:</label>
+                                    <input type="password" name="reppass" ref={this.cajaPassword} className="form-control" />
+                                </div>
+                                <div className='col md-6'>
+                                    <label>Provincia:</label>
+                                    <select name="provincia" ref={this.cajaProvincia} className="form-control">
+                                        {           
+                                            this.state.provincia.map((provincia, index) =>{
+                                                return(<option key={index} value={provincia.idProvincia}>
+                                                    {provincia.nombreProvincia}
+                                                </option>)
+                                            })     
+                                        }
+                                    </select>
+                                </div>
+                            </div>
                             <br/>
                             <button className='btn btn-info' type="submit" onClick={this.registro}>Registrarse</button>
                         </form>

@@ -28,8 +28,8 @@ export default class Registro extends Component {
         var telefono = this.cajaTelefono.current.value;
         var linkedin = this.cajaLinkedin.current.value;
         var password = this.cajaPassword.current.value;
-        var rol = this.cajaRoles.current.value;
-        var provincia = this.cajaProvincia.current.value;
+        var rol = parseInt(this.cajaRoles.current.value);
+        var provincia = parseInt(this.cajaProvincia.current.value);
 
         var datos = {
             nombre: nombre,
@@ -39,13 +39,16 @@ export default class Registro extends Component {
             password: password,
             idRole: rol,
             idProvincia: provincia,
-            idEmpresaCentro: null,
             estado: 1,
+        }
+
+        var headers = {
+            "content-type": "application/json"
         }
 
         const request = 'api/usuarios';
         const url = Global.urlApi + request;
-        axios.post(url, datos).then(response => {
+        axios.post(url, datos, headers).then(response => {
             this.setState({
                 usuario: response.data
             })

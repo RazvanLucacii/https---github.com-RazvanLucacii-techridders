@@ -32,14 +32,14 @@ export default class Registro extends Component {
         var provincia = parseInt(this.cajaProvincia.current.value);
 
         var datos = {
-            nombre: nombre,
-            email: email,
-            telefono: telefono,
-            linkedin: linkedin,
-            password: password,
-            idRole: rol,
-            idProvincia: provincia,
-            estado: 1,
+            "nombre": nombre,
+            "email": email,
+            "telefono": telefono,
+            "linkedin": linkedin,
+            "password": password,
+            "idRole": rol,
+            "idProvincia": provincia,
+            "estado": 1,
         }
 
         var headers = {
@@ -55,26 +55,10 @@ export default class Registro extends Component {
         })
     }
 
-    getRoles = () => {
-        const headers = {
-            Authorization: "Bearer " + Global.token
-        }
-        const request = 'api/roles';
-        const url = Global.urlApi + request;
-        axios.get(url, {headers}).then(response =>{
-            this.setState({
-                Role: response.data
-            })
-        })
-    }
-
     getProvincias = () => {
-        const headers = {
-            Authorization: "Bearer " + Global.token
-        }
         const request = 'api/provincias';
         const url = Global.urlApi + request;
-        axios.get(url, {headers}).then(response =>{
+        axios.get(url).then(response =>{
             this.setState({
                 provincia: response.data
             })
@@ -82,7 +66,6 @@ export default class Registro extends Component {
     }
 
     componentDidMount = () => {
-        this.getRoles();
         this.getProvincias()
     }
 
@@ -95,13 +78,9 @@ export default class Registro extends Component {
                         <form>
                             <label>Roles:</label>
                             <select name="rol" ref={this.cajaRoles} className="form-control">
-                                {           
-                                    this.state.Role.map((Role, index) =>{
-                                        return(<option key={index} value={Role.idRole}>
-                                            {Role.tipoRole}
-                                        </option>)
-                                    })     
-                                }
+                                <option id="1" value="1">Techrider</option>
+                                <option id="2" value="2">Profesor</option>
+                                <option id="3" value="3">Responsable Empresa</option>
                             </select>
                             <br/>
                             <div className="row">

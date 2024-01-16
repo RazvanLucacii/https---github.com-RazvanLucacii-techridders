@@ -17,7 +17,8 @@ export default class Registro extends Component {
     state = {
         usuario: {},
         provincia: [],
-        Role: []
+        Role: [],
+        empresacentros: []
     }
 
 
@@ -30,6 +31,7 @@ export default class Registro extends Component {
         var password = this.cajaPassword.current.value;
         var rol = parseInt(this.cajaRoles.current.value);
         var provincia = parseInt(this.cajaProvincia.current.value);
+        var idEmpresaCentro = parseInt(this.cajaEmpresaCentro.current.value);
 
         var datos = {
             "nombre": nombre,
@@ -40,6 +42,7 @@ export default class Registro extends Component {
             "idRole": rol,
             "idProvincia": provincia,
             "estado": 1,
+            "idEmpresaCentro" : idEmpresaCentro
         }
 
         var headers = {
@@ -61,6 +64,16 @@ export default class Registro extends Component {
         axios.get(url).then(response =>{
             this.setState({
                 provincia: response.data
+            })
+        })
+    }
+
+    getEmpresasCentro = () =>{
+        const request = 'api/empresascentros';
+        const url = Global.urlApi + request;
+        axios.get(url).then(response =>{
+            this.setState({
+                empresacentros: response.data
             })
         })
     }
@@ -134,6 +147,25 @@ export default class Registro extends Component {
                                     </select>
                                 </div>
                             </div>
+                            <label>Empres Centro:</label>
+                            <select name="provincia" ref={this.cajaEmpresaCentro} className="form-control">  
+                                Añadir un evento para cuando value sea -1, crear un formulario para registrar empresa/centro (sugerencia no obligatorio)
+                                    <option key={empresacentros.length} value={null}>
+                                        Vacio
+                                    </option>   
+                                {                                          
+                                    this.state.empresacentros.map((empresacentro, index) => {                                                 
+                                        if(empresacentro.idEmpresaCentro == parseInt(this.cajaProvincia.current.value)){  
+                                            return(<option key={index} value={emprescentro.idEmpresaCentro}>
+                                                {emprescentro.nombre}
+                                            </option>)
+                                        }
+                                    }) 
+                                }
+                                    <option key={empresacentros.length} value={-1}>
+                                        Añadir nuevo
+                                    </option>
+                            </select>
                             <br/>
                             <button className='btn btn-info' type="submit" onClick={this.registro}>Registrarse</button>
                         </form>

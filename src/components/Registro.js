@@ -79,7 +79,11 @@ export default class Registro extends Component {
     }
 
     componentDidMount = () => {
-        this.getProvincias()
+        this.getProvincias();
+        this.getEmpresasCentro()
+    }
+    componentDidUpdate = () =>{
+        this.getEmpresasCentro()
     }
 
     render() {
@@ -138,7 +142,7 @@ export default class Registro extends Component {
                                     <label>Provincia:</label>
                                     <select name="provincia" ref={this.cajaProvincia} className="form-control">
                                         {           
-                                            this.state.provincia.map((provincia, index) =>{
+                                            this.state.provincia.map((provincia, index) => {
                                                 return(<option key={index} value={provincia.idProvincia}>
                                                     {provincia.nombreProvincia}
                                                 </option>)
@@ -147,24 +151,18 @@ export default class Registro extends Component {
                                     </select>
                                 </div>
                             </div>
-                            <label>Empres Centro:</label>
-                            <select name="provincia" ref={this.cajaEmpresaCentro} className="form-control">  
-                                Añadir un evento para cuando value sea -1, crear un formulario para registrar empresa/centro (sugerencia no obligatorio)
-                                    <option key={empresacentros.length} value={null}>
-                                        Vacio
-                                    </option>   
+                            <label>Empresa/Centro:</label>
+                            <select name="empresacentro" ref={this.cajaEmpresaCentro} className="form-control">
+                                <option value={null}>
+                                    Sin Empresa/centro
+                                </option> 
                                 {                                          
-                                    this.state.empresacentros.map((empresacentro, index) => {                                                 
-                                        if(empresacentro.idEmpresaCentro == parseInt(this.cajaProvincia.current.value)){  
-                                            return(<option key={index} value={emprescentro.idEmpresaCentro}>
-                                                {emprescentro.nombre}
-                                            </option>)
-                                        }
+                                    this.state.empresacentros.map((empresacentro, index) => {                                                  
+                                        return(<option key={index} value={empresacentro.idEmpresaCentro}>
+                                            {empresacentro.nombre}
+                                        </option>)
                                     }) 
                                 }
-                                    <option key={empresacentros.length} value={-1}>
-                                        Añadir nuevo
-                                    </option>
                             </select>
                             <br/>
                             <button className='btn btn-info' type="submit" onClick={this.registro}>Registrarse</button>

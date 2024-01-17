@@ -10,10 +10,8 @@ export default class Registro extends Component {
     cajaTelefono = React.createRef();
     cajaLinkedin = React.createRef();
     cajaPassword = React.createRef();
-    cajaRepPassword = React.createRef();
     cajaApellidos = React.createRef();
     cajaProvincia = React.createRef();
-    cajaEmpresaCentro = React.createRef();
 
     state = {
         usuario: {},
@@ -26,15 +24,17 @@ export default class Registro extends Component {
     registro = (e) => {
         e.preventDefault();
         var nombre = this.cajaNombre.current.value;
+        var apellidos = this.cajaApellidos.current.value;
         var email = this.cajaEmail.current.value;
         var telefono = this.cajaTelefono.current.value;
         var linkedin = this.cajaLinkedin.current.value;
         var password = this.cajaPassword.current.value;
         var rol = parseInt(this.cajaRoles.current.value);
         var provincia = parseInt(this.cajaProvincia.current.value);
-        var idEmpresaCentro = parseInt(this.cajaEmpresaCentro.current.value);
 
         var datos = {
+            "idUsuario":0,
+            "apellidos": apellidos,
             "nombre": nombre,
             "email": email,
             "telefono": telefono,
@@ -42,8 +42,8 @@ export default class Registro extends Component {
             "password": password,
             "idRole": rol,
             "idProvincia": provincia,
-            "estado": 1,
-            "idEmpresaCentro" : idEmpresaCentro
+            "estado": 0,
+            "idEmpresaCentro" : null
         }
 
         var headers = {
@@ -92,9 +92,9 @@ export default class Registro extends Component {
                         <form>
                             <label>Roles:</label>
                             <select name="rol" ref={this.cajaRoles} className="form-control">
-                                <option id="1" value="1">Techrider</option>
+                                <option id="1" value="3">Techrider</option>
                                 <option id="2" value="2">Profesor</option>
-                                <option id="3" value="3">Responsable Empresa</option>
+                                <option id="3" value="2">Responsable Empresa</option>
                             </select>
                             <br/>
                             <div className="row">
@@ -133,7 +133,7 @@ export default class Registro extends Component {
                             <div className="row">
                                 <div className='col md-6'>
                                     <label>Repetir Contraseña:</label>
-                                    <input type="password" name="reppass" ref={this.cajaPassword} className="form-control" />
+                                    <input type="password" name="reppass" className="form-control" />
                                 </div>
                                 <div className='col md-6'>
                                     <label>Provincia:</label>
@@ -148,7 +148,7 @@ export default class Registro extends Component {
                                     </select>
                                 </div>
                             </div>
-                            <label>Empresa/Centro:</label>
+                            {/*<label>Empresa/Centro:</label>
                             <select name="empresacentro" ref={this.cajaEmpresaCentro} className="form-control">
                                 <option value={null}>
                                     Sin Empresa/centro
@@ -160,7 +160,7 @@ export default class Registro extends Component {
                                         </option>)
                                     }) 
                                 }
-                            </select>
+                            </select>*/}
                             <br/>
                             <button className='btn btn-info' type="submit" onClick={this.registro}>Registrarse</button>
                         </form>

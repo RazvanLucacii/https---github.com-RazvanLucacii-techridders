@@ -13,6 +13,7 @@ export default class Registro extends Component {
     cajaRepPassword = React.createRef();
     cajaApellidos = React.createRef();
     cajaProvincia = React.createRef();
+    cajaEmpresaCentro = React.createRef();
 
     state = {
         usuario: {},
@@ -51,10 +52,8 @@ export default class Registro extends Component {
 
         const request = 'api/usuarios';
         const url = Global.urlApi + request;
-        axios.post(url, datos, headers).then(response => {
-            this.setState({
-                usuario: response.data
-            })
+        axios.post(url, datos, headers).then(response => {  
+            console.log(response)       
         })
     }
 
@@ -82,9 +81,7 @@ export default class Registro extends Component {
         this.getProvincias();
         this.getEmpresasCentro()
     }
-    componentDidUpdate = () =>{
-        this.getEmpresasCentro()
-    }
+   
 
     render() {
         return (

@@ -14,7 +14,7 @@ class MenuRutas extends Component {
           <NavLink to="/nuevopersonaje" className="nav-link">Nuevo Personaje</NavLink>
           <NavLink to="/modificarpersonajes" className="nav-link">Modificar Personajes</NavLink>
           <NavLink to="/registro" className="nav-link">Registro</NavLink>
-          <NavLink to="/otraruta2" className="nav-link">Otra Ruta 2</NavLink>
+          <NavLink to="/AreaTech" className="nav-link">Area Tech</NavLink>
           <NavLink to="/otraruta3" className="nav-link">Otra Ruta 3</NavLink>
         </div>
         <img src="http://icons.iconarchive.com/icons/visualpharm/icons8-metro-style/128/System-Login-icon.png" alt="Login" className="login" />

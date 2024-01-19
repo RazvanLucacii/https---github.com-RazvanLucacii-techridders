@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './Home';
 import MenuRutas from './MenuRutas';
 import Registro from './Registro';
+import AreaTech from './AreaTech';
 
 export default class Router extends Component {
   render() {
@@ -22,6 +23,7 @@ export default class Router extends Component {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/registro" element={<Registro />} />
+          <Route path="/AreaTech" element={<AreaTech />} />
         </Routes>
       </BrowserRouter>
     );

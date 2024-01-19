@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import axios from 'axios';
 import Global from './Global';
-
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+import { Navigate } from 'react-router-dom'
 
 export default class Registro extends Component {
     cajaNombre = React.createRef();
@@ -17,7 +19,9 @@ export default class Registro extends Component {
         usuario: {},
         provincia: [],
         Role: [],
-        empresacentros: []
+        empresacentros: [],
+        MySwal:{},
+        status: false
     }
 
 
@@ -53,7 +57,12 @@ export default class Registro extends Component {
         const request = 'api/usuarios';
         const url = Global.urlApi + request;
         axios.post(url, datos, headers).then(response => {  
-            console.log(response)       
+            this.AlertOnRegister(response.status);
+            this.setState({
+                status: true
+            })
+        }).catch(error=>{
+            this.AlertOnRegister(error.status);
         })
     }
 
@@ -77,96 +86,116 @@ export default class Registro extends Component {
         })
     }
 
+    AlertOnRegister(status){
+        if(status === 200){        
+            Swal.fire({
+                icon: "success",
+                title: "Registro Completado",
+
+              });
+        }else{
+            Swal.fire({
+                icon: "error",
+                title: "Oops...",             
+              });
+        }
+    }
+
     componentDidMount = () => {
         this.getProvincias();
-        this.getEmpresasCentro()
+        this.getEmpresasCentro();
+        this.MySwal = withReactContent(Swal);
     }
    
 
     render() {
-        return (
-            <div className='container'>
-                <div className='card text-center'>
-                    <div className="card-body">
-                        <h2 className='card-title'>Registro</h2>
-                        <form>
-                            <label>Roles:</label>
-                            <select name="rol" ref={this.cajaRoles} className="form-control">
-                                <option id="1" value="3">Techrider</option>
-                                <option id="2" value="2">Profesor</option>
-                                <option id="3" value="2">Responsable Empresa</option>
-                            </select>
-                            <br/>
-                            <div className="row">
-                                <div className='col md-6'>
-                                    <label>Nombre:</label>
-                                    <input type="text" name="nombre" ref={this.cajaNombre} className="form-control" />
+        if(this.state.status === true){
+            return (<Navigate to="/"/>)
+        }else{
+            return (
+                <div className='container'>
+                    <div className='card text-center'>
+                        <div className="card-body">
+                            <h2 className='card-title'>Registro</h2>
+                            <form>
+                                <label>Roles:</label>
+                                <select name="rol" ref={this.cajaRoles} className="form-control">
+                                    <option id="1" value="3">Techrider</option>
+                                    <option id="2" value="2">Profesor</option>
+                                    <option id="3" value="2">Responsable Empresa</option>
+                                </select>
+                                <br/>
+                                <div className="row">
+                                    <div className='col md-6'>
+                                        <label>Nombre:</label>
+                                        <input type="text" name="nombre" ref={this.cajaNombre} className="form-control" />
+                                    </div>
+                                    <div className='col md-6'>
+                                        <label>Apellidos:</label>
+                                        <input type="text" name="apellidos" ref={this.cajaApellidos} className="form-control" />
+                                    </div>
                                 </div>
-                                <div className='col md-6'>
-                                    <label>Apellidos:</label>
-                                    <input type="text" name="apellidos" ref={this.cajaApellidos} className="form-control" />
+                                <br/>
+                                <div className="row">
+                                    <div className='col md-6'>
+                                        <label>Email:</label>
+                                        <input type="email" name="email" ref={this.cajaEmail} className="form-control"/>
+                                    </div>
+                                    <div className='col md-6'>
+                                        <label>Telefono:</label>
+                                        <input type="text" name="telefono" ref={this.cajaTelefono} className="form-control"/>
+                                    </div>
                                 </div>
-                            </div>
-                            <br/>
-                            <div className="row">
-                                <div className='col md-6'>
-                                    <label>Email:</label>
-                                    <input type="email" name="email" ref={this.cajaEmail} className="form-control"/>
+                                <br />
+                                <div className="row">
+                                    <div className='col md-6'>
+                                        <label>Linkedin:</label>
+                                        <input type="text" name="linkedin" ref={this.cajaLinkedin} className="form-control"/>
+                                    </div>
+                                    <div className='col md-6'>
+                                        <label>Contraseña:</label>
+                                        <input type="password" name="pass" ref={this.cajaPassword} className="form-control"/>
+                                    </div>
                                 </div>
-                                <div className='col md-6'>
-                                    <label>Telefono:</label>
-                                    <input type="text" name="telefono" ref={this.cajaTelefono} className="form-control"/>
+                                <br />
+                                <div className="row">
+                                    <div className='col md-6'>
+                                        <label>Repetir Contraseña:</label>
+                                        <input type="password" name="reppass" className="form-control" />
+                                    </div>
+                                    <div className='col md-6'>
+                                        <label>Provincia:</label>
+                                        <select name="provincia" ref={this.cajaProvincia} className="form-control">
+                                            {           
+                                                this.state.provincia.map((provincia, index) => {
+                                                    return(<option key={index} value={provincia.idProvincia}>
+                                                        {provincia.nombreProvincia}
+                                                    </option>)
+                                                })     
+                                            }
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <br />
-                            <div className="row">
-                                <div className='col md-6'>
-                                    <label>Linkedin:</label>
-                                    <input type="text" name="linkedin" ref={this.cajaLinkedin} className="form-control"/>
-                                </div>
-                                <div className='col md-6'>
-                                    <label>Contraseña:</label>
-                                    <input type="password" name="pass" ref={this.cajaPassword} className="form-control"/>
-                                </div>
-                            </div>
-                            <br />
-                            <div className="row">
-                                <div className='col md-6'>
-                                    <label>Repetir Contraseña:</label>
-                                    <input type="password" name="reppass" className="form-control" />
-                                </div>
-                                <div className='col md-6'>
-                                    <label>Provincia:</label>
-                                    <select name="provincia" ref={this.cajaProvincia} className="form-control">
-                                        {           
-                                            this.state.provincia.map((provincia, index) => {
-                                                return(<option key={index} value={provincia.idProvincia}>
-                                                    {provincia.nombreProvincia}
-                                                </option>)
-                                            })     
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-                            {/*<label>Empresa/Centro:</label>
-                            <select name="empresacentro" ref={this.cajaEmpresaCentro} className="form-control">
-                                <option value={null}>
-                                    Sin Empresa/centro
-                                </option> 
-                                {                                          
-                                    this.state.empresacentros.map((empresacentro, index) => {                                                  
-                                        return(<option key={index} value={empresacentro.idEmpresaCentro}>
-                                            {empresacentro.nombre}
-                                        </option>)
-                                    }) 
-                                }
-                            </select>*/}
-                            <br/>
-                            <button className='btn btn-info' type="submit" onClick={this.registro}>Registrarse</button>
-                        </form>
+                                {/*<label>Empresa/Centro:</label>
+                                <select name="empresacentro" ref={this.cajaEmpresaCentro} className="form-control">
+                                    <option value={null}>
+                                        Sin Empresa/centro
+                                    </option> 
+                                    {                                          
+                                        this.state.empresacentros.map((empresacentro, index) => {                                                  
+                                            return(<option key={index} value={empresacentro.idEmpresaCentro}>
+                                                {empresacentro.nombre}
+                                            </option>)
+                                        }) 
+                                    }
+                                </select>*/}
+                                <br/>
+                                <button className='btn btn-info' type="submit" onClick={this.registro}>Registrarse</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
+            );
+        }
     }
 }
